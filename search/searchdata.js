@@ -1,11 +1,11 @@
 var indexSectionsWithContent =
 {
-  0: "_abcdfghinpstv",
+  0: "_abcdfghinpsv",
   1: "cdgp",
   2: "f",
   3: "cdgp",
   4: "acdgps",
-  5: "_bchipt",
+  5: "_bchip",
   6: "s",
   7: "bcdns",
   8: "cdipsv"
