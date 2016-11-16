@@ -37,9 +37,13 @@ namespace Fontanella.Simone._5i.Briscola
         {
             game = new GameMaster();
             SettaImmagini();
+            txtVittoria.Visibility = Visibility.Hidden;
             txtPlayerPunti.Text = "Punti: " + game.player.punti.ToString();
             txtCpuPunti.Text = "Punti: " + game.cpu.punti.ToString();
-            //txtcard.Text = game.deck.carteRimanenti.ToString();
+            btnPlayerCard1.IsEnabled = true;
+            btnPlayerCard2.IsEnabled = true;
+            btnPlayerCard3.IsEnabled = true;
+            txtcard.Text = game.deck.carteRimanenti.ToString();
         }
         // tavolo[0] carta Player , tavolo [1] carta Cpu
         public void MossaCpu()
@@ -47,6 +51,8 @@ namespace Fontanella.Simone._5i.Briscola
             //intelligenzza Cpu che determina quale carta giocare
             int indexCardCpu = 0;
             indexCardCpu = game.CpuBrain();
+            if (indexCardCpu == 3)
+                MessageBox.Show("error");
 
             if (game.cpu.isTurn)
             {              
@@ -58,24 +64,14 @@ namespace Fontanella.Simone._5i.Briscola
         }
         private void MostraCarteAlCentro()
         {
-            VisualizzaCartaCentro1();          
+            VisualizzaCartaCentro1();
             VisualizzaCartaCentro2();           
         }
         void MossaSuccessiva()
         {
+            //se il gioco è terminato la partita finisce
             if (gameEnded())
-            {
-                if (game.player.punti == game.cpu.punti)
-                    MessageBox.Show("Pareggio");
-                else if (game.player.punti > game.cpu.punti)
-                    MessageBox.Show("Vince Player");
-                else
-                    MessageBox.Show("Vince Cpu");
                 return;
-            }
-
-            if (game.deck.carteRimanenti == 0)
-                UltimoTurno();
 
             if (game.cpu.isTurn)
             {
@@ -88,11 +84,19 @@ namespace Fontanella.Simone._5i.Briscola
                 return;
             }
         }
-        private void ConfrontoCarteAlCentro()
+        async private void ConfrontoCarteAlCentro()
         {
-            MostraCarteAlCentro();
+            btnPlayerCard1.IsEnabled = false;
+            btnPlayerCard2.IsEnabled = false;
+            btnPlayerCard3.IsEnabled = false;
+            VisualizzaCartaCentro1();
+            if (game.player.isTurn)
+            {
+                await Task.Delay(800);
+                VisualizzaCartaCentro2();
+            }
             game.ConfrontoCarte(game.cardCentroPlayer, game.cardCentroCpu);
-            MostraPunti();
+            txtcard.Text = game.deck.carteRimanenti.ToString();
             AggiornaImmagini();
             MossaSuccessiva();
         }      
@@ -103,14 +107,37 @@ namespace Fontanella.Simone._5i.Briscola
             txtCpuPunti.Text = "Punti: " + game.cpu.punti.ToString();
             //txtcard.Text = game.deck.carteRimanenti.ToString();
         }
+        public void EndGame()
+        {
+            if (gameEnded())
+            {
+                if (game.player.punti == game.cpu.punti)
+                {
+                    txtVittoria.Text = "Pareggio!";
+                    txtVittoria.Visibility = Visibility.Visible;
+                    //MessageBox.Show("Pareggio");
+                }
+                else if (game.player.punti > game.cpu.punti)
+                {
+                    txtVittoria.Text = "Hai vinto!";
+                    txtVittoria.Visibility = Visibility.Visible;
+                    //MessageBox.Show("Vince Player");
+                }
+                else
+                {
+                    txtVittoria.Text = "Hai Perso!";
+                    txtVittoria.Visibility = Visibility.Visible;
+                }
+
+            }
+            return;
+        }
         public async void AggiornaImmagini()
         {
-            //dopo ogni turno aggiorno le immagini con le nuove carte
-            btnPlayerCard1.IsEnabled = false;
-            btnPlayerCard2.IsEnabled = false;
-            btnPlayerCard3.IsEnabled = false;
+            //dopo ogni turno aggiorno le immagini con le nuove carte         
             await Task.Delay(1000);
             RimuoviCarteCentro();
+            MostraPunti();
             if (game.cpu.handCards.Count >= 3 && game.player.handCards.Count >= 3)
             {
                 btnPlayerCard1.Source = game.player.handCards[0].img;
@@ -118,25 +145,42 @@ namespace Fontanella.Simone._5i.Briscola
                 btnPlayerCard3.Source = game.player.handCards[2].img;
                 btnCpuCard1.Source = game.cpu.handCards[0].imgRetroCarta;
                 btnCpuCard2.Source = game.cpu.handCards[1].imgRetroCarta;
-                btnCpuCard3.Source = game.cpu.handCards[2].imgRetroCarta; 
-                if (game.cpu.isTurn)
-                    VisualizzaCartaCentro2();
+                btnCpuCard3.Source = game.cpu.handCards[2].imgRetroCarta;             
             }
+            if (game.cpu.isTurn)
+            {
+                await Task.Delay(800);
+                VisualizzaCartaCentro2();
+                btnPlayerCard1.IsEnabled = true;
+                btnPlayerCard2.IsEnabled = true;
+                btnPlayerCard3.IsEnabled = true;
+            }
+
+            if (game.deck.carteRimanenti == 0)
+                UltimoTurno();
+            
+
+            // decreta il vincitore
+            if (gameEnded())
+                EndGame();
         }
         private void RimuoviCarteCentro()
         {        
             //metodo per rimuovere le immagini dal centro del tavolo
             btnCardCentro1.Source = null;
             btnCardCentro2.Source = null;
-            btnPlayerCard1.IsEnabled = true;
-            btnPlayerCard2.IsEnabled = true;
-            btnPlayerCard3.IsEnabled = true;
+            if (game.player.isTurn)
+            {
+                btnPlayerCard1.IsEnabled = true;
+                btnPlayerCard2.IsEnabled = true;
+                btnPlayerCard3.IsEnabled = true;
+            }
         }
         private void VisualizzaCartaCentro1()
         {
-            if (btnCardCentro1.Source == null)
+            if (btnCardCentro2.Source == null)
             {
-                btnCardCentro1.Source = game.cardCentroPlayer.img;
+                btnCardCentro2.Source = game.cardCentroPlayer.img;
 
                 if (game.cardCentroPlayer.img == btnPlayerCard1.Source)
                     btnPlayerCard1.Source = null;
@@ -148,9 +192,11 @@ namespace Fontanella.Simone._5i.Briscola
         }
         private void VisualizzaCartaCentro2()
         {          
-            if (btnCardCentro2.Source == null)
+            if (btnCardCentro1.Source == null)
             {
-                btnCardCentro2.Source = game.cardCentroCpu.img;
+                if (game.cpu.handCards.Count == 0)
+                    return;
+                btnCardCentro1.Source = game.cardCentroCpu.img;
 
                 #region UltimoTurno
                 if (game.cpu.handCards.Count == 1)
@@ -206,6 +252,8 @@ namespace Fontanella.Simone._5i.Briscola
             btnCpuCard2.Source = game.cpu.handCards[1].imgRetroCarta;
             btnCpuCard3.Source = game.cpu.handCards[2].imgRetroCarta;
             btnDeck.Source = game.briscola.imgRetroCarta;
+            btnCardCentro1.Source = null;
+            btnCardCentro2.Source = null;
         }      
         private void btnPlayerCard1_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -281,8 +329,388 @@ namespace Fontanella.Simone._5i.Briscola
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            game = new GameMaster();
-            StartGame();
+            if (MessageBox.Show("Vuoi iniziare una nuova partita?", "Inizia partita", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+            {
+                return;
+            }
+            else
+            {
+                game = new GameMaster();
+                StartGame();
+            }
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//code by Fontanella Simone

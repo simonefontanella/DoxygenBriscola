@@ -12,92 +12,104 @@
         <Grid.Background>
             <ImageBrush ImageSource="Immagini/background.png" />
         </Grid.Background>
-
+        
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0">
-            <TextBlock Foreground="White" FontSize="40" x:Name="txtCpuPunti" Text="Punti : 0"  Margin="0,0,0,130"/>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Left">
+            <Button Background="White" Content="Ricomincia Partita" Width="auto" Height="50" Margin="0,0,0,0" FontStretch="UltraCondensed" FontStyle="Italic" FontWeight="SemiBold" HorizontalContentAlignment="Center" HorizontalAlignment="Center" UseLayoutRounding="False" Click="Button_Click"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
-            <Image Margin="25,30,0,30" Name="btnCpuCard1" Source="Immagini/retroCarta.png" />
-            <Image Margin="25,30,0,30" Name="btnCpuCard2" Source="Immagini/retroCarta.png" />
-            <Image Margin="25,30,0,30" Name="btnCpuCard3" Source="Immagini/retroCarta.png" />
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" HorizontalAlignment="Right" Grid.RowSpan="2">
+            <TextBlock Foreground="White" FontSize="38" x:Name="txtCpuPunti" Text="Punti : 0"/>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
-            <Button Background="White" Content="Ricomincia Partita" Width="110" Margin="0,0,0,139" FontStretch="UltraCondensed" FontStyle="Italic" FontWeight="SemiBold" HorizontalContentAlignment="Center" HorizontalAlignment="Center" UseLayoutRounding="False" Click="Button_Click"/>
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" HorizontalAlignment="Center" Grid.RowSpan="2"  >
+            <Image Margin="5" Name="btnCpuCard1" Source="Immagini/retroCarta.png" />
+            <Image Margin="5" Name="btnCpuCard2" Source="Immagini/retroCarta.png" />
+            <Image Margin="5" Name="btnCpuCard3" Source="Immagini/retroCarta.png" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="1">
-           <!-- <TextBlock Name="txtcard" Text="0"/>-->
-            <Image  Margin="-30,40,40,0" x:Name="btnBriscola" Source="Immagini/bastoni1.png">
+        <StackPanel Grid.Row="6"  Orientation="Horizontal" HorizontalAlignment="Center" Grid.RowSpan="2" >
+            <Image Margin="5" Name="btnPlayerCard1" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard1_MouseDown" >
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Image Margin="5" Name="btnPlayerCard2" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard2_MouseDown">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Image Margin="5" Name="btnPlayerCard3" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard3_MouseDown">
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </StackPanel>
+        <StackPanel  Grid.Row="6"  Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.RowSpan="2" >
+            <TextBlock Foreground="White" FontSize="40" x:Name="txtPlayerPunti" Text="Punti: 0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"  Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.RowSpan="2" >
+            <Image Margin="5" Name="btnCardCentro1"/>
+            <Image Margin="5" Name="btnCardCentro2"/>
+        </StackPanel>
+
+        <StackPanel  Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.RowSpan="2">
+
+            <Image  Margin="-3,7,19,5" x:Name="btnBriscola" Source="Immagini/bastoni1.png">
                 <Image.RenderTransform>
                     <RotateTransform Angle="-90" CenterX="50" CenterY="40" />
                 </Image.RenderTransform>
             </Image>
-            <Image Name="btnDeck" Margin="-15,26,25,27" Source="Immagini/retroCarta.png" />
+            <Image x:Name="btnDeck" Margin="5" Source="Immagini/retroCarta.png" />
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
-            <Image Margin="25,30,0,30" Name="btnCardCentro1"/>
-            <Image Margin="25,30,0,30" Name="btnCardCentro2"/>
+        <StackPanel Grid.Column="2" Grid.Row="3" Grid.RowSpan="2" HorizontalAlignment="Center">
+            <TextBlock Name="txtVittoria" Visibility="Visible" Foreground="White" FontSize="70" Text="Hai vinto!"></TextBlock>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2">
-            <Image Margin="25,30,0,30" Name="btnPlayerCard1" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard1_MouseDown" >
-                <Image.Style>
-                    <Style TargetType="{x:Type Image}">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
-            <Image Margin="25,30,0,30" Name="btnPlayerCard2" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard2_MouseDown">
-                <Image.Style>
-                    <Style TargetType="{x:Type Image}">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
-            <Image Margin="25,30,0,30" Name="btnPlayerCard3" Source="Immagini/retroCarta.png" MouseDown="btnPlayerCard3_MouseDown">
-                <Image.Style>
-                    <Style TargetType="{x:Type Image}">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect ShadowDepth="0" Color="Blue" Opacity="1" BlurRadius="20"/>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>
-        </StackPanel>
-        
-        <StackPanel Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,117,0,-127">
-            <TextBlock Foreground="White" FontSize="40" x:Name="txtPlayerPunti" Text="Punti: 0" Margin="0,0,0,130"/>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Bottom" >
+            <TextBlock Margin="0,0,38,10" FontSize="16" FontWeight="Bold" Foreground="White" Text="0" Name="txtcard"></TextBlock>
         </StackPanel>
 
     </Grid>

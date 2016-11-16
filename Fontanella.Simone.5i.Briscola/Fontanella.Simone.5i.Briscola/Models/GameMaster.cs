@@ -157,44 +157,23 @@ namespace Fontanella.Simone._5i.Briscola
                 return 0;
             }
 
-           if(cardCentroPlayer.seme == semeBriscola)
-           {
-                int index = 0;
-                foreach (var item in cpu.handCards)
-                {
-                    if (item.seme != semeBriscola)
-                    {
-                        if (item.valore < puntiCartaPlayer && giocaQuesta.valore < item.valore)
-                            giocaQuesta = item;
-                    }
-                    index++;
-     
-                }
-                return index;                
-           }
-
-           if(cardCentroPlayer.seme != semeBriscola && cardCentroPlayer.valore == 0)
+            if (cardCentroPlayer.seme == semeBriscola)
             {
-                int index = 0;
-                foreach (var item in cpu.handCards)
-                {
-                    if (item.seme == cardCentroPlayer.seme)
-                    {
-                        if (item.valore > 0 && giocaQuesta.valore > item.valore)
-                            giocaQuesta = item;
-                    }
-                    else
-                    {
-
-                    }
-                    index++;
-
-                }
-                return index;
+                return GetCartaMinore(cpu.handCards);
             }
 
+            if (cardCentroPlayer.seme != semeBriscola && cardCentroPlayer.valore == 0)
+            {
+                return GetCartaMaggiore(cpu.handCards);
+            }
 
+            if (cardCentroPlayer.valore >= 4)
+            {
 
+                return GetCartaMaggiore(cardCentroPlayer, cpu.handCards);
+            }
+
+            #region Backup
             /*if (player.isTurn)
             {
                 puntiCartaPlayer = cardCentroPlayer.valore;
@@ -231,7 +210,69 @@ namespace Fontanella.Simone._5i.Briscola
                     }
                 }
             }*/
+            #endregion
+
+            return 0;
+        }
+
+        int GetCartaMaggiore(Card cartaGiocatore, List<Card> cards)
+        {
+            Card cartaMaggiore = new Card();
+            foreach (var item in cards)
+            {
+                if(item.seme == cartaGiocatore.seme && item.valore > cartaGiocatore.valore)
+                {
+                    if(cartaMaggiore.valore < item.valore)
+                        cartaMaggiore = item;
+                }
+                
+            }
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                if (cartaMaggiore == cards[i])
+                    return i;
+            }
+            return 0;
+            
+        }
+        int GetCartaMinore(List<Card> cards)
+        {
+            Card cartaMaggiore = new Card();
+            foreach (var item in cards)
+            {
+                if (item.valore < cartaMaggiore.valore)
+                {
+                    cartaMaggiore = item;
+                }
+            }
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                if (cartaMaggiore == cards[i])
+                    return i;
+            }
+            return 0;
+        }
+        int GetCartaMaggiore(List<Card> cards)
+        {
+            Card cartaMaggiore = new Card();
+            foreach (var item in cards)
+            {
+                if (item.valore > cartaMaggiore.valore)
+                {
+                    cartaMaggiore = item;
+                }
+            }
+
+            for (int i = 0; i < cards.Count; i++)
+            {
+                if (cartaMaggiore == cards[i])
+                    return i;
+            }
             return 0;
         }
     }
 }
+
+
